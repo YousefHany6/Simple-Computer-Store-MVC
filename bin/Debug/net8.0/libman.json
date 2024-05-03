@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "drawer@3.2.2",
+      "destination": "wwwroot/drawer/"
+    },
+    {
+      "library": "bootstrap-drawer@1.0.6",
+      "destination": "wwwroot/bootstrap-drawer/"
+    },
+    {
+      "library": "owl-carousel@1.3.3",
+      "destination": "wwwroot/owl-carousel/",
+      "files": [
+        "owl.carousel.min.js"
+      ]
+    }
+  ]
+}

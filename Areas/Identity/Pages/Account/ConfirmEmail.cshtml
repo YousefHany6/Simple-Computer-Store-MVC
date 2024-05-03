@@ -1,0 +1,17 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "تم تأكيد حسابك";
+}
+<style>
+	#footer {
+		display: none;
+	}
+</style>
+<div style="
+    margin-top: 30px;
+    margin-right: 20px;
+">
+<h1>@ViewData["Title"]</h1>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+</div>

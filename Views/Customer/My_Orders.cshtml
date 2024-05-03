@@ -1,0 +1,565 @@
+﻿@model IEnumerable<Order>
+<link href="~/css/order_Page.css" rel="stylesheet" />
+<style>
+	body {
+		background-color: #eee;
+	}
+</style>
+@{
+	if (Model.Any())
+	{
+
+		<section class="">
+
+			<div class="container py-5 h-100">
+				<div class="row d-flex justify-content-center align-items-center h-100">
+					@{
+						foreach (var item in Model.OrderByDescending(ss => ss.State == OrderState.Pending))
+						{
+							<div class="col-12">
+								<div class="card card-stepper text-black" style="border-radius: 16px;margin-bottom: 10px;">
+
+									<div class="card-body p-5">
+
+										<div class="d-flex justify-content-between align-items-center mb-5" style="
+								direction: ltr;
+								">
+											<div>
+												<a class="mb-0" asp-action="order_Details" asp-controller="Customer" asp-route-orderid="@item.OrderID"><span class="text-primary font-weight-bold">تفاصيل الطلب </span></a>
+											</div>
+											<div class="text-end" style="
+								direction: rtl;
+								">
+												<p class="mb-0">تاريخ الطلب : <span>@item.OrderDate.Date</span></p>
+												<p class="mb-0">رقم الهاتف : <span class="font-weight-bold">@item.PhoneNumber</span></p>
+												<p class="mb-0">
+													سعر الطلب : <span class="font-weight-bold" style="
+											color: crimson;
+											font-size: large;
+											font-weight: 600;
+														">$@item.TotaPrice</span>
+												</p>
+											</div>
+										</div>
+										@{
+											if (item.State == OrderState.Pending)
+											{
+												<ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0  text-center" id="step1"></li>
+													<li class="step0  text-center" id="step2"></li>
+													<li class="step0  text-center" id="step3"></li>
+													<li class="step0  text-center" id="step4"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																			margin-right: 7px;
+																																	"> قيد التنفيذ</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																				margin-right: 7px;
+																																			"> تم الشحن</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																				margin-right: 7px;
+																																			"> خرج للتوصيل</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																				margin-right: 7px;
+																																			"> تم التوصيل</p>
+														</div>
+													</div>
+												</div>
+
+											}
+											else if (item.State == OrderState.refuse)
+											{
+												<style>
+													#progressbar-222 #step11:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 li:nth-child(3):after {
+														left: 1%;
+														width: 100%;
+														background: #fe1717 !important;
+													}
+
+													#progressbar-222 #step22:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 #step33:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 #step44:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 li:before {
+														line-height: 37px;
+														display: block;
+														font-size: 12px;
+														background: #fe1717;
+														border-radius: 50%;
+													}
+
+													#progressbar-222 li:after {
+														content: '';
+														width: 100%;
+														height: 10px;
+														background: #FE1744;
+														position: absolute;
+														left: 0%;
+														right: 0%;
+														top: 15px;
+														z-index: -1;
+													}
+
+													#progressbar-222 {
+														color: #455A64;
+													}
+
+														#progressbar-222 li {
+															list-style-type: none;
+															font-size: 13px;
+															width: 33.33%;
+															float: left;
+															position: relative;
+														}
+
+															#progressbar-222 li:nth-child(1):after {
+																left: 1%;
+																width: 100%
+															}
+
+															#progressbar-222 li:nth-child(2):after {
+																left: 1%;
+																width: 100%;
+															}
+
+															#progressbar-222 li:nth-child(4) {
+																left: 0;
+																width: 37px;
+															}
+
+																#progressbar-222 li:nth-child(4):after {
+																	left: 0;
+																	width: 0;
+																}
+
+												</style>
+												<ul id="progressbar-222" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0  text-center" id="step11"></li>
+													<li class="step0  text-center" id="step22"></li>
+													<li class="step0  text-center" id="step33"></li>
+													<li class="step0  text-center" id="step44"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																					margin-right: 7px;
+																																							"> تم رفض طلبك</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																									"> تم الشحن</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																									"> خرج للتوصيل</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																									"> تم التوصيل</p>
+														</div>
+													</div>
+												</div>
+											}
+											else if (item.State == OrderState.OK)
+											{
+												<ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0 active text-center" id="step1"></li>
+													<li class="step0  text-center" id="step2"></li>
+													<li class="step0  text-center" id="step3"></li>
+													<li class="step0  text-center" id="step4"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																				margin-right: 7px;
+																																				"> تم الموافقة على الطلب</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																					margin-right: 7px;
+																																						"> تم الشحن</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																					margin-right: 7px;
+																																						"> خرج للتوصيل</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																					margin-right: 7px;
+																																						"> تم التوصيل</p>
+														</div>
+													</div>
+												</div>
+											}
+											else if (item.State == OrderState.Shipped)
+											{
+												<ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0 active text-center" id="step1"></li>
+													<li class="step0 active text-center" id="step2"></li>
+													<li class="step0  text-center" id="step3"></li>
+													<li class="step0  text-center" id="step4"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																					margin-right: 7px;
+																																							"> تم الموافقة على الطلب</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																									">تم الشحن الان</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																									"> خرج للتوصيل</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																									"> تم التوصيل</p>
+														</div>
+													</div>
+												</div>
+											}
+											else if (item.State == OrderState.Delivered)
+											{
+												<ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0 active text-center" id="step1"></li>
+													<li class="step0 active text-center" id="step2"></li>
+													<li class="step0 active  text-center" id="step3"></li>
+													<li class="step0  text-center" id="step4"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																						margin-right: 7px;
+																																										"> تم الموافقة على الطلب</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																							margin-right: 7px;
+																																												">تم الشحن الان</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																							margin-right: 7px;
+																																												">خرج للتوصيل الان</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																							margin-right: 7px;
+																																												"> تم التوصيل</p>
+														</div>
+													</div>
+												</div>
+											}
+											else if (item.State == OrderState.OK_Delivered)
+											{
+												<ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0 active text-center" id="step1"></li>
+													<li class="step0 active text-center" id="step2"></li>
+													<li class="step0 active  text-center" id="step3"></li>
+													<li class="step0 active text-center" id="step4"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																							margin-right: 7px;
+																																													"> تم الموافقة على الطلب</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																								margin-right: 7px;
+																																															">تم الشحن الان</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																								margin-right: 7px;
+																																															">خرج للتوصيل الان</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																								margin-right: 7px;
+																																															"> تم توصيل الطلب</p>
+														</div>
+													</div>
+												</div>
+											}
+											else if (item.State == OrderState.cancel)
+											{
+												<style>
+													#progressbar-222 #step11:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 li:nth-child(3):after {
+														left: 1%;
+														width: 100%;
+														background: #fe1717 !important;
+													}
+
+													#progressbar-222 #step22:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 #step33:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 #step44:before {
+														content: '\f057';
+														font-family: "Font Awesome 5 Free";
+														color: #fff;
+														width: 37px;
+														margin-left: 0px;
+														padding-left: 0px;
+													}
+
+													#progressbar-222 li:before {
+														line-height: 37px;
+														display: block;
+														font-size: 12px;
+														background: #fe1717;
+														border-radius: 50%;
+													}
+
+													#progressbar-222 li:after {
+														content: '';
+														width: 100%;
+														height: 10px;
+														background: #FE1744;
+														position: absolute;
+														left: 0%;
+														right: 0%;
+														top: 15px;
+														z-index: -1;
+													}
+
+													#progressbar-222 {
+														color: #455A64;
+													}
+
+														#progressbar-222 li {
+															list-style-type: none;
+															font-size: 13px;
+															width: 33.33%;
+															float: left;
+															position: relative;
+														}
+
+															#progressbar-222 li:nth-child(1):after {
+																left: 1%;
+																width: 100%
+															}
+
+															#progressbar-222 li:nth-child(2):after {
+																left: 1%;
+																width: 100%;
+															}
+
+															#progressbar-222 li:nth-child(4) {
+																left: 0;
+																width: 37px;
+															}
+
+																#progressbar-222 li:nth-child(4):after {
+																	left: 0;
+																	width: 0;
+																}
+
+												</style>
+												<ul id="progressbar-222" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+													<li class="step0  text-center" id="step11"></li>
+													<li class="step0  text-center" id="step22"></li>
+													<li class="step0  text-center" id="step33"></li>
+													<li class="step0  text-center" id="step44"></li>
+												</ul>
+												<div class="d-flex justify-content-between">
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																								margin-right: 7px;
+																																													"> تم الغاء طلبك</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																									margin-right: 7px;
+																																															"> تم الشحن</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																									margin-right: 7px;
+																																															"> خرج للتوصيل</p>
+														</div>
+													</div>
+													<div class="d-lg-flex align-items-center">
+														<i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+														<div>
+															<p class="fw-bold mb-1" style="
+																									margin-right: 7px;
+																																															"> تم التوصيل</p>
+														</div>
+													</div>
+												</div>
+											}
+
+										}
+
+
+									</div>
+
+								</div>
+							</div>
+						}
+					}
+
+				</div>
+			</div>
+		</section>
+
+	}
+	else
+	{
+		<h3 style="
+														text-align: center;
+														font-size: xx-large;
+														font-family: system-ui;
+																				">
+			لا يوجد طلبات الان
+		</h3>
+	}
+}

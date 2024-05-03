@@ -1,0 +1,306 @@
+﻿@model Product
+<link href="~/template/css/ppp.css" rel="stylesheet" />
+
+<style>
+ .text-bold {
+  font-weight: 800;
+ }
+
+ text-color {
+  color: #0093c4;
+ }
+
+ /* Main image - left */
+ .main-img img {
+  height: 346px;
+  width: 346px;
+ }
+
+ /* Preview images */
+ .previews img {
+  width: 100%;
+  height: 140px;
+ }
+
+ .main-description .category {
+  text-transform: uppercase;
+  color: #0093c4;
+ }
+
+ .main-description .product-title {
+  font-size: 2.5rem;
+ }
+
+ .old-price-discount {
+  font-weight: 600;
+ }
+
+ .new-price {
+  font-size: 2rem;
+ }
+
+ .details-title {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #757575;
+ }
+
+ .buttons .block {
+  margin-right: 5px;
+ }
+
+ .quantity input {
+  border-radius: 0;
+  height: 40px;
+ }
+
+
+ .custom-btn {
+  text-transform: capitalize;
+  background-color: #0093c4;
+  color: white;
+  width: 150px;
+  height: 40px;
+  border-radius: 0;
+ }
+
+  .custom-btn:hover {
+   background-color: #0093c4 !important;
+   font-size: 18px;
+   color: white !important;
+  }
+
+ .similar-product img {
+  height: 200px;
+ }
+
+ .similar-product {
+  text-align: left;
+ }
+
+  .similar-product .title {
+   margin: 17px 0px 4px 0px;
+  }
+
+  .similar-product .price {
+   font-weight: bold;
+  }
+
+ .questions .icon i {
+  font-size: 2rem;
+ }
+
+ .questions-icon {
+  font-size: 2rem;
+  color: #0093c4;
+ }
+
+
+ /* Small devices (landscape phones, less than 768px) */
+ @@media (max-width: 767.98px) {
+  /* Make preview images responsive  */
+  .previews img {
+   width: 100%;
+   height: auto;
+  }
+ }
+</style>
+@{
+ var randomPhotos = Model.Photos.OrderBy(x => Guid.NewGuid()).ToList();
+}
+
+<div class="container my-5">
+ <div class="row">
+  <div class="col-md-5">
+   <a  >
+    <img src="data:image/jpeg;base64,@Convert.ToBase64String(randomPhotos.First().Url)" alt="ProductS" class="card-img-top" alt="product.title" />
+   </a>
+  </div>
+  <div class="col-md-7">
+   <div class="main-description px-2">
+    <div class="category text-bold">
+     القسم: @Model.Category.Category_Name
+    </div>
+    <div class="product-title text-bold my-3">
+@Model.Product_Name   
+</div>
+
+
+    <div class="price-area my-4">
+     @{
+      if (Model.HasDiscount == true)
+      {
+       foreach (var item in Model.Discounts)
+       {
+        <p class="old-price mb-1"><del style="color:red;">$@Model.price</del> <span class="old-price-discount text-danger" style="color: #217bb8;font-weight: bolder;font-size: 24px;">(@(100 - ((item.DiscountAmount / Model.price) * 100))% خصم)</span></p>
+        <p class="new-price text-bold mb-1">$@item.DiscountAmount</p>
+       }
+      }
+      else
+      {
+       <p class="new-price text-bold mb-1" style="color: #217bb8;font-weight: bolder;font-size: 24px;">$@Model.price</p>
+      }
+     }
+
+    </div>
+
+    <form enctype="multipart/form-data" method="post">
+    <div class="buttons d-flex my-5">
+     <div class="block" style="display:none;">
+      <a href="#" class="shadow btn custom-btn ">شراء</a>
+     </div>
+
+     <div class="block">
+       <button type="submit" asp-controller="Customer" asp-action="CartList" asp-route-idprd="@Model.ProductId" class="shadow btn custom-btn">اضافة الى السلة</button>
+     </div>
+
+     <div class="block quantity">
+      <input type="number" class="form-control" id="cart_quantity" value="1" min="1" max="50"  name="cart_quantity">
+     </div>
+     </div>
+    </form>
+
+
+
+
+   </div>
+
+   <div class="product-details my-4">
+    <p class="details-title text-color mb-1">تفاصيل المنتج</p>
+    @{
+     if (Model.Description==null|| Model.Description=="")
+     {
+    <p class="description">لا يوجد تفاصيل</p>
+      
+     }else
+     {
+      <p class="description">@Model.Description</p>
+
+     }
+   }
+   </div>
+
+
+   <div class="delivery my-4">
+    <p class="font-weight-bold mb-0"><span><i class="fa-solid fa-truck"></i></span> <b>التسليم يتم خلال 3 أيام من تاريخ الشراء</b> </p>
+    <p class="text-secondary">اطلب الآن لتحصل على توصيل هذا المنتج</p>
+   </div>
+   <div class="delivery-options my-4">
+    <p class="font-weight-bold mb-0"><span><i class="fa-solid fa-filter"></i></span> <b>خيارات التسليم</b> </p>
+    <p class="text-secondary">اطلب الآن لتحصل على توصيل هذا المنتج</p>
+   </div>
+
+
+  </div>
+ </div>
+</div>
+
+
+
+<div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;background-color: #eee;">
+ <h1 class="text-center" style="    color: #ffc800;
+    text-shadow: 1px 1px 1px black;
+    border-bottom: 2px solid #ffc800; margin-bottom:20px; ">
+  منتجات اخرى
+ </h1>
+
+ <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+  @{
+   foreach (var item in ViewBag.sproducts as List<Product>)
+   {
+    <div class="col hp">
+     <div class="card h-100 shadow-sm">
+      @{
+       var randomPhoto = item.Photos.OrderBy(p => Guid.NewGuid()).FirstOrDefault();
+      }
+      <a target="_blank" asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId">
+       <img src="data:image/png;base64,@Convert.ToBase64String(randomPhoto.Url)" class="card-img-top" alt="product.title" />
+      </a>
+      @if (item.HasDiscount == true)
+      {
+       foreach (var d in item.Discounts)
+       {
+        <div class="">
+         <div class="d-flex  align-items-end h-100" style="
+                                               direction: ltr;
+                                               height: 0px !important;
+                                                     ">
+          <h5><span class="badge bg-danger ms-2">-@(100 - ((d.DiscountAmount / item.price) * 100))%</span></h5>
+         </div>
+        </div>
+
+
+       }
+      }
+
+      <div class="label-top shadow-sm">
+       <a class="text-white" style="text-decoration:none;">@item.Type</a>
+      </div>
+      <div class="card-body">
+       <div class="clearfix mb-3">
+        @if (item.HasDiscount == true)
+        {
+         foreach (var d in item.Discounts)
+         {
+
+          <span class="float-start badge rounded-pill bg-success">$@d.DiscountAmount</span>
+
+          <span class="float-start badge rounded-pill bg-success" style="color:red !important;"><del>$@item.price</del></span>
+         }
+        }
+        else
+        {
+         <span class="float-start badge rounded-pill bg-success">$@item.price</span>
+
+
+        }
+        <span class="float-end"><a asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId" class="small text-muted text-uppercase aff-link">عرض المزيد</a></span>
+       </div>
+       <h5 class="card-title">
+        <a target="_blank" asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId">
+
+         @if (item.Description == null)
+         {
+          <div>
+           لا يوجد معلومات
+
+          </div>
+         }
+         else
+         {
+          <div>
+           @item.Description
+          </div>
+         }
+        </a>
+       </h5>
+
+       <div class="d-grid gap-2 my-4">
+        <form asp-controller="Customer" asp-action="CartList" asp-route-idprd="@item.ProductId"  method="post" enctype="multipart/form-data" style="
+         display: contents;
+          ">
+         <button type="submit" class="btn btn-warning bold-btn">عرض المزيد</button>
+        </form>
+       </div>
+       <div class="clearfix mb-1">
+
+        <span class="float-start"><a asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId"><i class="fas fa-question-circle"></i></a></span>
+
+        <span class="float-end">
+         <i class="far fa-heart" style="cursor: pointer; visibility:hidden;"></i>
+
+        </span>
+       </div>
+      </div>
+     </div>
+    </div>
+
+   }
+  }
+
+
+
+ </div>
+</div>
+

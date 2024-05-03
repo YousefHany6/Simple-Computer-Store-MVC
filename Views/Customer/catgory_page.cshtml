@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Product>
+<style>
+	#footer {
+		margin-top: 0px;
+	}
+
+	@@media (max-width: 767.98px) {
+		.border-sm-start-none {
+			border-left: none !important;
+		}
+	}
+</style>
+<section style="background-color: #eee;">
+	@{
+		if (Model.Any())
+		{
+
+			<div class="container py-5">
+				@{
+					foreach (var item in Model)
+					{
+
+						<div class="row justify-content-center mb-3">
+							<div class="col-md-12 col-xl-10">
+								<div class="card shadow-0 border rounded-3">
+									<div class="card-body">
+										<div class="row">
+											<div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+												<div class="bg-image hover-zoom ripple rounded ripple-surface">
+													@{
+
+														var randomPhotos = item.Photos.OrderBy(x => Guid.NewGuid()).ToList();
+													}
+													<a style="text-decoration:none; color:none;" asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId">
+
+														<img src="data:image/jpeg;base64,@Convert.ToBase64String(randomPhotos.First().Url)"
+																			class="w-100" />
+													</a>
+													<a href="#!">
+														<div class="hover-overlay">
+															<div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+														</div>
+													</a>
+												</div>
+											</div>
+											<div class="col-md-6 col-lg-6 col-xl-6" style="
+										margin-top: 40px;
+												">
+												<h5>@item.Product_Name</h5>
+
+												<div class="d-flex flex-row" style="visibility:hidden;">
+													<div class="text-danger mb-1 me-2">
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+													</div>
+													<span>310</span>
+												</div>
+												<div class="mt-1 mb-0 text-muted small">
+													<span style="
+								display: block;
+								font-size: large;
+								color: purple;
+								font-weight: bolder;
+								">المتوفر : <span>@item.quantity</span></span>
+													<span>@item.Type</span>
+													<span class="text-primary"> • </span>
+													<span>@item.Category.Category_Name</span>
+												</div>
+												<p class="text-truncate mb-4 mb-md-0">
+													@item.Description
+												</p>
+											</div>
+											<div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start" style="
+										margin-top: 40px;
+												">
+
+												@{
+
+													if (item.quantity == 0)
+													{
+														<div class="mask">
+															<div class="d-flex  align-items-end h-100" style="    direction: ltr;
+																																">
+																<h5><span class="badge bg-danger ms-2">غير متوفر الان</span></h5>
+															</div>
+														</div>
+
+													}
+													if (item.HasDiscount)
+													{
+														foreach (var d in item.Discounts)
+														{
+
+															<div class="mask">
+																<div class="d-flex  align-items-end h-100" style="    direction: ltr;
+																																			">
+																	<h5><span class="badge bg-danger ms-2">-@(100 - ((d.DiscountAmount / item.price) * 100))%</span></h5>
+																</div>
+															</div>
+
+															<div class="d-flex flex-row align-items-center mb-1">
+																<h4 class="mb-1 me-1">$@d.DiscountAmount</h4>
+																<span class="text-danger"><s>$@item.price</s></span>
+															</div>
+														}
+													}
+													else
+													{
+														<div class="d-flex flex-row align-items-center mb-1">
+															<h4 class="mb-1 me-1">$@item.price</h4>
+														</div>
+													}
+												}
+												<h6 class="text-success">توصيل مجانى</h6>
+												<div class="d-flex flex-column mt-4">
+
+													<a class="btn btn-primary btn-sm" asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId">عرض المزيد</a>
+													<form asp-controller="Customer" asp-action="CartList" asp-route-idprd="@item.ProductId" asp-route-catid="@item.CategoryID" method="post" enctype="multipart/form-data" style="
+								display: contents;
+								">
+
+														<button class="btn btn-outline-primary btn-sm mt-2" type="submit">
+															اضافة الى السلة
+														</button>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
+		}
+		else
+		{
+			<h3 style="
+																			text-align: center;
+																			font-size: xx-large;
+																			font-family: system-ui;
+																														">
+				لا يوجد منتجات
+			</h3>
+		}
+	}
+
+</section>

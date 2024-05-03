@@ -1,0 +1,56 @@
+﻿@model Order
+<!-- Add these in your head section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/intlTelInput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber/8.12.18/libphonenumber.min.js"></script>
+
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="modal-body">
+	<div class="form-group" dir="rtl">
+		<label class="control-label" style="float:right;">عنوانك</label>
+		<input asp-for="address" name="address" required class="form-control" placeholder="ادخل  عنوانك" />
+		<span asp-validation-for="address" class="text-danger"></span>
+
+	</div>
+ <div class="form-group" style="
+    display: flex;
+    flex-direction: column;
+">
+  <label class="control-label" style="display: flex;justify-content: flex-end;"> رقم هاتف</label>
+  <input asp-for="PhoneNumber" id="phoneNumberInput" name="PhoneNumber"  type="tel" class="form-control" placeholder="ادخل رقم هاتفك" style="margin-top: 10px !important;
+    width: 100%;" />
+  <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+ </div>
+</div>
+
+<script>
+ // Initialize the international telephone input
+ var input = document.querySelector("#phoneNumberInput");
+ var iti = window.intlTelInput(input, {
+  utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.js",
+  initialCountry: "auto", // Automatically select the user's country
+  separateDialCode: true,
+  nationalMode: false,
+  formatOnDisplay: true,
+  autoPlaceholder: "aggressive", // Add a placeholder with an example number
+  placeholderNumberType: "MOBILE", // Use a mobile number as the placeholder
+  allowDropdown: true,
+  geoIpLookup: function (callback) {
+   // Use a geoip service to automatically set the country based on the user's IP address
+   // Replace 'https://ipinfo.io' with the URL of your preferred geoip service
+   fetch('https://ipinfo.io', { headers: { 'Accept': 'application/json' } })
+    .then(response => response.json())
+    .then(data => callback(data.country || ''));
+  },
+  maxDigits: 15, // Set a maximum length for the phone number
+ });
+
+ var form = document.querySelector("form");
+ form.addEventListener("submit", function () {
+  var isValid = iti.isValidNumber();
+  if (!isValid) {
+   return false; // prevent form submission
+  }
+ });
+</script>

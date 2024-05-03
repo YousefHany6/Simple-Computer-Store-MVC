@@ -1,0 +1,120 @@
+﻿@model Discount
+
+@{
+ var product = ViewBag.pd;
+}
+<style>
+ .form-control {
+  line-height: 2.3 !important;
+ }
+
+ /* CSS */
+ .button-69 {
+  background-color: initial;
+  background-image: linear-gradient(#8614f8 0, #760be0 100%);
+  border-radius: 5px;
+  border-style: none;
+  box-shadow: rgba(245, 244, 247, .25) 0 1px 1px inset;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  height: 60px;
+  line-height: 60px;
+  margin-left: -4px;
+  outline: 0;
+  text-align: center;
+  transition: all .3s cubic-bezier(.05, .03, .35, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: bottom;
+  width: 325px;
+ }
+
+  .button-69:hover {
+   opacity: .7;
+  }
+
+ @@media screen and (max-width: 1000px) {
+  .button-69 {
+   font-size: 14px;
+   height: 55px;
+   line-height: 55px;
+   width: 150px;
+  }
+ }
+</style>
+<h1>تعديل الخصم</h1>
+<hr />
+<div style="text-align:center;">
+ <a style="font-size: larger;" asp-controller="Discount" asp-action="Index">الرجوع الى القائمة</a>
+</div>
+<form asp-controller="Discount" asp-action="Edit" method="post" enctype="multipart/form-data">
+ <input type="hidden" asp-for="ProductId" value="@product.ProductId" />
+ <input type="hidden" asp-for="Discount_Time_start"/>
+ <input type="hidden" asp-for="DiscountId"/>
+ <div class="row" style="display: flex;
+    justify-content: center;">
+  <div class="col-lg-6" style="line-height: 48px;">
+   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+   <div class="form-group">
+    <label class="control-label">اسم المنتج</label>
+    <input type="text" readonly value="@product.Product_Name" class="form-control" placeholder="ادخل اسم المنتج" />
+   </div>
+   <div class="form-group">
+    <label class="control-label">ادخل قيمة الخصم (%)</label>
+    <input type="number" min="0" max="100" step="any" aria-required="true" name="Percentage" id="Percentage" class="form-control" placeholder="مثال: 5%" oninput="calculateDiscount();" />
+   </div>
+   <div class="form-group">
+    <label asp-for="DiscountAmount" class="control-label">السعر بعد الخصم</label>
+    <input type="number" min="1" step="any" readonly asp-for="DiscountAmount" id="DiscountAmount" class="form-control" placeholder="السعر بعد الخصم" />
+    <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+   </div>
+
+   <div class="form-group">
+    <label asp-for="Discount_End_Time" class="control-label">تاريخ الانتهاء</label>
+    <input type="datetime-local" min="@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm")" asp-for="Discount_End_Time" class="form-control" />
+    <span asp-validation-for="Discount_End_Time" class="text-danger"></span>
+   </div>
+
+
+  </div>
+  <div class="form-group" style="
+    text-align: center;
+    margin-top: 25px;
+">
+   <input type="submit" value="تعديل" class="button-69" role="button" />
+  </div>
+ </div>
+</form>
+
+
+
+<script>
+ function calculateDiscount() {
+  var percentageInput = document.getElementById('Percentage');
+  var discountAmountInput = document.getElementById('DiscountAmount');
+
+  // Check if Percentage input is empty
+  if (percentageInput.value.trim() === "") {
+   // Clear DiscountAmount input
+   discountAmountInput.value = "";
+   return;
+  }
+
+  var percentage = parseFloat(percentageInput.value) || 0;
+  var originalPrice = @product.price;
+  var discountAmount = (percentage / 100) * originalPrice;
+  var discountedPrice = originalPrice - discountAmount;
+
+  // Update the DiscountAmount input with the calculated value
+  discountAmountInput.value = discountedPrice.toFixed(2);
+ }
+</script>
+
+@section Scripts {
+ <partial name="_ValidationScriptsPartial" />
+}

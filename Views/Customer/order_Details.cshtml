@@ -1,0 +1,170 @@
+﻿@model IEnumerable<OrderList>
+<link href="~/css/cart.css" rel="stylesheet" />
+<div class="container pb-5 mt-n2 mt-md-n3" style="
+    direction: ltr;
+    margin-top: 15px;
+">
+	<div class="row" style="
+    text-align: center;
+">
+		<div class="col-xl-9 col-md-8" style="
+    margin-left: 8rem;
+">
+			<h2 class="h6 d-flex flex-wrap justify-content-between align-Models-center px-4 py-3 bg-secondary">
+				<span>المنتجات</span>
+				<a class="font-size-sm" asp-controller="Customer" asp-action="Index">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left" style="width: 1rem; height: 1rem;"><polyline points="15 18 9 12 15 6"></polyline></svg>متابعة التسوق
+				</a>
+			</h2>
+			@{
+				if (Model.Any())
+				{
+					foreach (var item in Model)
+					{
+
+						<div class="d-sm-flex justify-content-between my-4 pb-4 border-bottom">
+							<div class="media d-block d-sm-flex text-center text-sm-left">
+								@if (item.Product.Photos.Any())
+								{
+									var randomPhoto = item.Product.Photos.OrderBy(p => Guid.NewGuid()).FirstOrDefault();
+									<a class="cart-Model-thumb mx-auto " asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.Product.ProductId">
+										<img src="data:image/png;base64,@Convert.ToBase64String(randomPhoto.Url)" alt="Product" style="
+													width: 160px;
+																		">
+									</a>
+									if (item.Product.HasDiscount == true)
+									{
+										foreach (var cc in item.Product.Discounts)
+										{
+											<div class="mask">
+												<div class="d-flex  align-Models-end h-100" style="    direction: ltr;
+																								">
+													<h5><span class="badge bg-danger ms-2">-@(100 - ((cc.DiscountAmount / item.Product.price) * 100))%</span></h5>
+												</div>
+											</div>
+										}
+									}
+
+								}
+								else
+								{
+									<a class="cart-Model-thumb mx-auto mr-sm-4">
+
+										<img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1562074043/234.png" alt="">
+									</a>
+								}
+								<div class="media-body pt-3">
+									<h3 class="product-card-title font-weight-semibold border-0 pb-0"><a asp-controller="Customer" asp-route-prdid="@item.Product.ProductId" asp-action="product_page">@item.Product.Product_Name</a></h3>
+									<div class="font-size-sm"><span class="text-muted mr-2">النوع :</span>@item.Product.Type</div>
+									<div class="font-size-sm"><span class="text-muted mr-2">القسم :</span>@item.Product.Category.Category_Name</div>
+									@{
+										if (item.Product.HasDiscount == true)
+										{
+											foreach (var cc in item.Product.Discounts)
+											{
+
+
+												<div class="font-size-lg text-primary pt-2">$@cc.DiscountAmount</div>
+												<div class="font-size-lg text-primary pt-2" style="color:red !important;"><del>$@item.Product.price</del></div>
+											}
+
+
+										}
+										else
+										{
+											<div class="font-size-lg text-primary pt-2">$@item.Product.price</div>
+
+										}
+									}
+								</div>
+							</div>
+							<div class="pt-2 pt-sm-0 pl-sm-3 mx-auto mx-sm-0 text-center text-sm-left" style="max-width: 10rem;">
+								<div class="form-group mb-2">
+									<label for="quantity1">الكمية</label>
+									<input class="form-control form-control-sm quantityInput" disabled type="number" min="1" id="quantity1" name="qs" value="@item.Quantity">
+								</div>
+							</div>
+						</div>
+
+
+
+					}
+					foreach (var item in Model)
+					{
+						<div class="card mb-4" dir="rtl">
+							<div class="card-header py-3">
+								<h5 class="mb-0">السعر</h5>
+							</div>
+							<div class="card-body">
+								<ul class="list-group list-group-flush">
+
+									<li class="list-group-Model d-flex justify-content-between align-Models-center border-0 px-0 mb-3">
+										<div>
+											<strong>السعر الكلي</strong>
+										</div>
+										<strong>$<span id="totalPrice">@item.Order.TotaPrice</span></strong>
+									</li>
+								</ul>
+							</div>
+						</div>
+						if (item.Order.State == OrderState.Pending)
+						{
+							<div style="
+														display: flex;
+														">
+								<a asp-action="My_Orders" asp-controller="Customer" class="button-43 col-md-6">
+									رجوع الى طلباتى
+								</a>
+								<form method="post" asp-action="Cancel_Order" asp-controller="Customer" asp-route-orderid="@item.OrderID" style="
+									display: contents;
+															">
+									<button type="submit" style="margin-left:10px;
+																				border-radius: 0.5rem;
+																				margin-left:10px;
+																				width: 50%;
+																"
+																	class="btn btn-danger">
+										الغاء الطلب
+									</button>
+								</form>
+							</div>
+						}
+						else
+						{
+							<a asp-action="My_Orders" asp-controller="Customer" class="button-43 " style="
+					width: 100% !important;
+				">
+								رجوع الى طلباتى
+							</a>
+
+						}
+
+						break;
+					}
+				}
+				else
+				{
+					<h3 style="
+																				text-align: center;
+																				font-size: xx-large;
+																				font-family: system-ui;
+																																">
+						لا يوجد تفاصيل
+					</h3>
+				}
+
+
+			}
+
+
+		</div>
+
+	</div>
+</div>
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+
+
+}

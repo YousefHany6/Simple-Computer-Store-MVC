@@ -1,0 +1,158 @@
+﻿@using Computer_Store.Data
+@using Computer_Store.Rpo_models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<SUser> SignInManager
+@inject UserManager<SUser> UserManager
+@inject IRepository<Category> cat
+<link href="~/css/customer.css" rel="stylesheet" />
+
+@{
+	var cc = await cat.GetAll();
+
+	if (User.Identity.IsAuthenticated && SignInManager.IsSignedIn(User))
+	{
+		var user = await UserManager.GetUserAsync(User);
+
+		if (user != null)
+		{
+			var roles = await UserManager.GetRolesAsync(user);
+			if (!(roles.Contains("Admin")))
+			{
+				<div class="top-navbar">
+					<p>مرحبا بكم في متجرنا</p>
+					<div class="icons">
+						<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "", new { area = "" })" method="post">
+							<button style="
+					background-color: #fff;
+					border: none;
+					margin-left: 9px;
+					font-weight: 900;
+				">
+								<img src="~/images/register.png" alt="" width="18px">تسجيل الخروج
+							</button>
+						</form>
+					</div>
+				</div>
+				<!-- top navbar -->
+				<!-- navbar -->
+		<nav class="navbar navbar-expand-lg" id="navbar">
+			<div class="container-fluid">
+						<a class="navbar-brand" asp-action="Index" asp-controller="Customer" id="logo"><span id="span1">E</span>Lectronic <span>Shop</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span><img src="~/images/menu.png" alt="" width="30px"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link " aria-current="page" asp-controller="Customer" asp-action="Index">الصفحة الرئيسية</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								الاقسام
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: rgb(67 0 86);">
+
+								@{
+									foreach (var item in cc)
+									{
+												<li><a class="dropdown-item" sp-controller="Customer" asp-action="catgory_page" asp-route-catid="@item.CategoryID">@item.Category_Name</a></li>
+
+									}
+								}
+							
+							</ul>
+						</li>
+
+						<li class="nav-item">
+									<a class="nav-link" asp-action="Contact" asp-controller="Customer">تواصل معنا</a>
+						</li>
+								<li class="nav-item">
+									<a class="nav-link" asp-controller="Customer" asp-action="cart"><i class="fa-solid fa-cart-shopping"></i>سلة التسوق</a>
+								</li>
+
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										اعداداتي <i class="fa-solid fa-gear"></i>
+									</a>
+									<ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: rgb(67 0 86);">
+										<li class="nav-item">
+											<a class="nav-link" asp-action="My_Orders" asp-controller="Customer">طلباتى</a>
+										</li>
+				
+										<li class="nav-item">
+											<a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">ملفى الشخصى</a>
+										</li>
+									</ul>
+								</li>
+								</ul>
+
+							<form class="d-flex" asp-action="Sereach" asp-controller="Customer" id="search">
+								<input class="form-control me-2" type="search" placeholder="ابحث...." name="name" aria-label="Search">
+								<button class="btn btn-outline-success" type="submit">ابحث</button>
+							</form>
+
+				</div>
+			</div>
+		</nav>
+				<!-- navbar -->
+
+			}
+		}
+
+	}
+	else
+	{
+		<div class="top-navbar">
+			<p>مرحبا بكم في متجرنا</p>
+			<div class="icons">
+				<a asp-area="Identity" asp-page="/Account/Login"><img src="~/images/register.png" alt="" width="18px">تسجيل الدخول</a>
+				<a asp-area="Identity" asp-page="/Account/Register"><img src="~/images/register.png" alt="" width="18px">تسجيل</a>
+			</div>
+		</div>
+		<!-- top navbar -->
+		<!-- navbar -->
+		<nav class="navbar navbar-expand-lg" id="navbar">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="index.html" id="logo"><span id="span1">E</span>Lectronic <span>Shop</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span><img src="~/images/menu.png" alt="" width="30px"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0" style="
+					margin-left: 13rem;
+		">
+						<li class="nav-item">
+							<a class="nav-link " aria-current="page" asp-controller="Customer" asp-action="Index">الصفحة الرئيسية</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								الاقسام
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: rgb(67 0 86);">
+
+								@{
+									foreach (var item in cc)
+									{
+										<li><a class="dropdown-item" sp-controller="Customer" asp-action="cate_page" asp-route-catid="@item.CategoryID">@item.Category_Name</a></li>
+
+									}
+								}
+							
+							</ul>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="#">تواصل معنا</a>
+						</li>
+					</ul>
+					<form class="d-flex" asp-action="Sereach" asp-controller="Customer" id="search">
+						<input class="form-control me-2" type="search" placeholder="ابحث...." name="name" aria-label="Search">
+						<button class="btn btn-outline-success" type="submit">ابحث</button>
+					</form>
+
+			</div>
+		</nav>
+		<!-- navbar -->
+	}
+}
+

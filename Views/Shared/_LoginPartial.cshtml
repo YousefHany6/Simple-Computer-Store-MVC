@@ -1,0 +1,125 @@
+﻿@using Computer_Store.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<SUser> SignInManager
+@inject UserManager<SUser> UserManager
+
+@if (User.Identity.IsAuthenticated && SignInManager.IsSignedIn(User))
+{
+	var user = await UserManager.GetUserAsync(User);
+
+	if (user != null)
+	{
+		var roles = await UserManager.GetRolesAsync(user);
+
+		@if (roles.Contains("Admin"))
+		{
+			
+
+			<link href="~/css/Admin.css" rel="stylesheet" />
+			<div class="sidebar close">
+				<div class="logo-details">
+					<i class="fas fa-store"></i>					<span class="logo_name">Admin Dashboard</span>
+				</div>
+				<ul class="nav-links">
+					<li>
+						<a asp-controller="Product" asp-action="Index">
+							<i class="fas fa-store"></i>							<span class="link_name">الصفحة الرئيسية</span>
+						</a>
+					</li>
+					<li>
+						<div class="iocn-link">
+							<a>
+								<i class="fa-solid fa-layer-group"></i>								<span class="link_name">الاقسام</span>
+							</a>
+							<i class='bx bxs-chevron-down arrow'></i>
+						</div>
+						<ul class="sub-menu">
+							<li><a asp-controller="Categorie" asp-action="Index">عرض الاقسام</a></li>
+							<li><a asp-controller="Categorie" asp-action="Index">اضافة قسم</a></li>
+						</ul>
+					</li>
+					<li>
+						<div class="iocn-link">
+							<a>
+								<i class="fa-brands fa-product-hunt"></i>								<span class="link_name">المنتجات</span>
+							</a>
+							<i class='bx bxs-chevron-down arrow'></i>
+						</div>
+						<ul class="sub-menu">
+							<li><a asp-controller="Product" asp-action="Index">عرض المنتجات</a></li>
+							<li><a asp-controller="Product" asp-action="Create">اضافة منتج</a></li>
+						</ul>
+					</li>
+
+					<li>
+						<div class="iocn-link">
+							<a>
+								<i class="fa-solid fa-file"></i>								<span class="link_name">الخصومات</span>
+							</a>
+							<i class='bx bxs-chevron-down arrow'></i>
+						</div>
+						<ul class="sub-menu">
+							<li><a asp-controller="Discount" asp-action="Index">عرض الخصومات</a></li>
+							<li><a asp-controller="Discount" asp-action="Discount_All_Products">اضافة خصم على كل المنتجات</a></li>
+
+						</ul>
+					</li>
+					<li>
+						<div class="iocn-link">
+							<a>
+								<i class="fa-solid fa-truck"></i>								<span class="link_name">الطلبات</span>
+							</a>
+							<i class='bx bxs-chevron-down arrow'></i>
+						</div>
+						<ul class="sub-menu">
+							<li><a asp-controller="Order" asp-action="Index">كل الطلبات</a></li>
+							<li><a asp-controller="Order" asp-action="PendingOrder">الطلبات الجديدة</a></li>
+						</ul>
+					</li>
+
+					<li>
+						<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "", new { area = "" })">
+							<button class="logout" type="submit">
+								<i class='bx bx-log-out'></i>
+							</button>
+							<span class="link_name" style="
+										font-size: 18px;
+										font-weight: 400;
+										color: #fff;
+position:relative;
+										transition: all 0.4s ease;
+										cursor: pointer;
+right:17px;
+display: inline;">تسجيل الخروج</span>
+
+							<ul class="sub-menu blank">
+								<li><a class="link_name">Setting</a></li>
+							</ul>
+						</form>
+					</li>
+					<li>
+
+						<div class="profile-details">
+							<div class="profile-content">
+								<!--<img src="image/profile.jpg" alt="profileImg">-->
+							</div>
+							<div class="name-job">
+								<div class="profile_name">&copy;Yousef Hany</div>
+								<div class="job">All Rights Reserved.</div>
+							</div>
+							<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "", new { area = "" })">
+								<button class="logout" type="submit">
+									<i class='bx bx-log-out'></i>
+								</button>
+							</form>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+
+		}
+	}
+
+	}
+

@@ -1,0 +1,142 @@
+﻿@model Computer_Store.Models.Category
+
+<style>
+ .con {
+  margin-top: 45px;
+ }
+
+ .button-21 {
+  align-items: center;
+  appearance: none;
+  background-color: #3EB2FD;
+  background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%);
+  background-size: calc(100% + 20px) calc(100% + 20px);
+  border-radius: 100px;
+  border-width: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: CircularStd,sans-serif;
+  font-size: 1rem;
+  height: auto;
+  justify-content: center;
+  line-height: 1.5;
+  padding: 6px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color .2s,background-position .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+ }
+
+  .button-21:active,
+  .button-21:focus {
+   outline: none;
+  }
+
+  .button-21:hover {
+   background-position: -20px -20px;
+  }
+
+  .button-21:focus:not(:active) {
+   box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
+  }
+
+ input[type="file"] {
+  display: none;
+ }
+
+ .lb {
+  display: block;
+  position: relative;
+  background-color: #025bee;
+  color: #ffffff;
+  font-size: 18px;
+  text-align: center;
+  width: 300px;
+  padding: 18px 0;
+  margin: auto;
+  border-radius: 5px;
+  cursor: pointer;
+ }
+
+ .container p {
+  text-align: center;
+  margin: 20px 0 30px 0;
+ }
+
+ #images {
+  width: 90%;
+  position: relative;
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
+  flex-wrap: wrap;
+ }
+
+ figure {
+  width: 45%;
+ }
+
+ img {
+  width: 100%;
+ }
+
+ figcaption {
+  text-align: center;
+  font-size: 2.4vmin;
+  margin-top: 0.5vmin;
+ }
+
+</style>
+<div class="container" dir="rtl">
+ <div style="float:left;">
+  <a asp-action="Index">الرجوع الى القائمة</a>
+ </div>
+ <h3 class="header">تعديل قسم</h3>
+ <div class="card">
+  <div class="card-body">
+   <form asp-action="Edit" asp-controller="Categorie" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CategoryID" />
+
+    <input type="text" asp-for="Category_Name" class="form-control" placeholder="مثال : لاب توب">
+    <span asp-validation-for="Category_Name" class="text-danger"></span>
+    <div class="col-lg-12">
+     <div class="con">
+      <input type="file" name="photos"  id="file-input" accept="image/png, image/jpeg" onchange="preview()">
+      <label class="lb" for="file-input">
+       <i class="fas fa-upload"></i> &nbsp; تغيير صورة القسم
+      </label>
+      <p id="num-of-files" style="
+">تغيير صورة القسم</p>
+      <div id="images"></div>
+     </div>
+    </div>
+
+    <div style="text-align:center;">
+    <button type="submit" style="
+    margin-top: 10px;
+    width: 30%;
+" class="button-21 ">
+     تعديل
+    </button>
+     </div>
+   </form>
+  </div>
+ </div>
+
+</div>
+<script src="~/js/photos.js"></script>
+
+
+@section Scripts {
+ <partial name="_ValidationScriptsPartial" />
+}

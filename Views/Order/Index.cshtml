@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Computer_Store.Models.Order>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<style>
+	table.dataTable thead th, table.dataTable td {
+		text-align: center;
+	}
+</style>
+@{
+	if (Model.Any())
+	{
+
+
+		<div class="table-responsive">
+			<table id="example" class="table table-striped" style="width:100%">
+				<thead>
+					<tr>
+						<th>اسم العميل</th>
+						<th>تاريخ الطلب</th>
+						<th>الكمية</th>
+						<th>الحالة</th>
+						<th>السعر</th>
+					</tr>
+				</thead>
+				<tbody class="table-rows">
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>@item.Customer.FullName</td>
+							<td>@item.OrderDate</td>
+							<td>@item.OrderLists.GroupBy(ss=>ss.OrderID==item.OrderID).Count()</td>
+							@{
+								if (item.State == OrderState.Pending)
+								{
+									<td>قيد التنفيذ</td>
+
+								}
+								else if (item.State == OrderState.refuse)
+								{
+									<td>تم رفض الطلب</td>
+								}
+								else if (item.State == OrderState.cancel)
+								{
+									<td>تم الغاء الطلب</td>
+								}
+								else if (item.State == OrderState.OK)
+								{
+									<td>تم الموافقة على الطلب</td>
+								}
+								else if (item.State == OrderState.Shipped)
+								{
+									<td>تم الشحن</td>
+								}
+								else if (item.State == OrderState.Delivered)
+								{
+									<td>خرج للتوصيل</td>
+								}
+								else if (item.State == OrderState.OK_Delivered)
+								{
+									<td>تم التوصيل</td>
+								}
+						}
+
+							<td>@item.TotaPrice</td>
+						</tr>
+
+
+					}
+				</tbody>
+			</table>
+		</div>
+
+	}
+	else
+	{
+		<div class="table">
+			<div class="table_header">
+				<div style="    display: flex;
+											flex-direction: column;">
+					<h1>لا يوجد طلبات الان </h1>
+				</div>
+
+			</div>
+		</div>
+	}
+}
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+	<script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"></script>
+	<script>
+		$(document).ready(function () {
+			$('#example').DataTable({
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"
+				}
+			});
+		});
+	</script>
+
+
+}
+

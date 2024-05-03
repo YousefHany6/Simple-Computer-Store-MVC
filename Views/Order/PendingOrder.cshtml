@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Computer_Store.Models.Order>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<link href="~/css/buttons.css" rel="stylesheet" />
+<style>
+	table.dataTable thead th,
+	table.dataTable td {
+		text-align: center;
+	}
+</style>
+@{
+	if (Model.Any())
+	{
+
+
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+		<div class="table-responsive">
+			<form method="post" enctype="multipart/form-data">
+				<table id="example" class="table table-striped" style="width:100%">
+					<thead>
+						<tr>
+							<th id="checkAll"><input type="checkbox" id="selectAllCheckbox" /></th>
+							<th>اسم العميل</th>
+							<th>تاريخ الطلب</th>
+							<th>الكمية</th>
+							<th>الحالة</th>
+							<th>السعر</th>
+						</tr>
+					</thead>
+					<tbody class="table-rows">
+						@foreach (var item in Model)
+						{
+							if (item.State == OrderState.Pending || item.State == OrderState.Shipped || item.State == OrderState.OK || item.State == OrderState.Delivered)
+							{
+								<tr>
+									<td class="checks"><input type="checkbox" value="@item.OrderID" /></td>
+									<td>@item.Customer.FullName</td>
+									<td>@item.OrderDate</td>
+									<td>@item.OrderLists.GroupBy(ss => ss.OrderID == item.OrderID).Count()</td>
+									@if (item.State == OrderState.Pending)
+									{
+									<td>قيد التنفيذ</td>
+
+									}
+									else if (item.State == OrderState.Shipped)
+									{
+										<td>تم الشحن</td>
+
+									}
+									else if (item.State == OrderState.Delivered)
+									{
+										<td>خرج للتوصيل</td>
+
+									}
+									else if (item.State == OrderState.OK)
+									{
+										<td>تم الموافقة على الطلب</td>
+
+									}
+									<td>@item.TotaPrice</td>
+								</tr>
+
+							}
+
+
+						}
+					</tbody>
+				</table>
+				<input type="hidden" id="selectedOrderIdsInput" name="selectedOrderIds" />
+				<div class="multi-button">
+
+					<button class="button" type="submit" asp-action="UpdateOrderStatus" asp-controller="Order" asp-route-ordstate="@OrderState.refuse" id="cut"><span>      رفض الطلب</span></button>
+					<button class="button" type="submit" asp-action="UpdateOrderStatus" asp-controller="Order" asp-route-ordstate="@OrderState.OK" id="copy"><span>      قبول الطلب</span></button>
+					<button class="button" type="submit" asp-action="UpdateOrderStatus" asp-controller="Order" asp-route-ordstate="@OrderState.Shipped" id="paste1"><span>      تم الشحن</span></button>
+					<button class="button" type="submit" asp-action="UpdateOrderStatus" asp-controller="Order" asp-route-ordstate="@OrderState.Delivered" id="paste2"><span>      خرج للتوصيل</span></button>
+					<button class="button" type="submit" asp-action="UpdateOrderStatus" asp-controller="Order" asp-route-ordstate="@OrderState.OK_Delivered" id="paste3"><span>      تم التوصيل</span></button>
+				</div>
+
+			</form>
+		</div>
+	}
+	else
+	{
+		<div class="table">
+			<div class="table_header">
+				<div style="    display: flex;
+													flex-direction: column;">
+					<h1>لا يوجد طلبات الان </h1>
+				</div>
+
+			</div>
+		</div>
+	}
+}
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+	<script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"></script>
+	<script>
+		$(document).ready(function () {
+			var table = $('#example').DataTable({
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"
+				}
+			});
+
+			// Checkbox functionality
+			$('#selectAllCheckbox').click(function () {
+				$('.table-rows .checks input:checkbox').prop('checked', this.checked);
+			});
+
+			// Form submission
+			$('form').submit(function (e) {
+				var selectedOrderIds = [];
+				$('.table-rows .checks input:checkbox:checked').each(function () {
+					selectedOrderIds.push($(this).val());
+				});
+				$('#selectedOrderIdsInput').val(selectedOrderIds.join(','));
+
+				// You can add additional logic or validation here before submitting the form.
+
+				return true; // Continue with the form submission
+			});
+		});
+	</script>
+}

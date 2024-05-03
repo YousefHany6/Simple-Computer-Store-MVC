@@ -1,0 +1,135 @@
+﻿@model Computer_Store.Models.Product
+
+
+
+<link href="~/css/photos.css" rel="stylesheet" />
+<style>
+	.form-control {
+	line-height: 2.3 !important;
+	}
+
+/* CSS */
+.button-69 {
+		background-color: initial;
+		background-image: linear-gradient(#8614f8 0, #760be0 100%);
+		border-radius: 5px;
+		border-style: none;
+		box-shadow: rgba(245, 244, 247, .25) 0 1px 1px inset;
+		color: #fff;
+		cursor: pointer;
+		display: inline-block;
+		font-family: Inter, sans-serif;
+		font-size: 24px;
+		font-weight: 500;
+		height: 60px;
+		line-height: 60px;
+		margin-left: -4px;
+		outline: 0;
+		text-align: center;
+		transition: all .3s cubic-bezier(.05, .03, .35, 1);
+		user-select: none;
+		-webkit-user-select: none;
+		touch-action: manipulation;
+		vertical-align: bottom;
+		width: 325px;
+}
+
+.button-69:hover {
+  opacity: .7;
+}
+
+@@media screen and (max-width: 1000px) {
+  .button-69 {
+    font-size: 14px;
+    height: 55px;
+    line-height: 55px;
+    width: 150px;
+  }
+}
+</style>
+<h1 style="text-align:center;">اضافة منتج</h1>
+<hr />
+<div style="text-align:center;">
+	<a style="font-size: larger;" asp-action="Index">الرجوع الى القائمة</a>
+</div>
+<form asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+<div class="row">
+	<div class="col-lg-6" style="
+    line-height: 48px;
+">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="Product_Name" class="control-label">الاسم</label>
+				<input asp-for="Product_Name" class="form-control" placeholder="ادخل اسم المنتج" />
+				<span asp-validation-for="Product_Name" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Type" class="control-label">النوع</label>
+				<input asp-for="Type" class="form-control" placeholder="ادخل نوع المنتج" />
+				<span asp-validation-for="Type" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="quantity" class="control-label">الكمية</label>
+				<input type="number" min="1" asp-for="quantity" class="form-control" placeholder="ادخل كمية المنتج" />
+				<span asp-validation-for="quantity" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="CategoryID" class="control-label">القسم</label>
+				<select aria-required="true" asp-for="CategoryID" asp-items="ViewBag.cat" class="form-select" aria-label="Default select example">
+					@{
+						var cattt = (ViewBag.cat as SelectList)?.Any() ?? false;
+						if (cattt)
+						{
+					<option  selected>اختر القسم</option>
+							
+						}else
+						{
+							<option selected>لا يوجد اقسام </option>
+
+						}
+							
+					}
+				</select>				<span asp-validation-for="CategoryID" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="price" class="control-label">السعر</label>
+				<input type="number" min="1" step="any" asp-for="price" class="form-control" placeholder="ادخل سعر المنتج" />
+				<span asp-validation-for="price" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Description" class="form-label">وصف المنتج</label>
+				<textarea asp-for="Description" class="form-control" id="t1" rows="3" placeholder="ادخل موصفات المنتج"></textarea>
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+	</div>
+
+	<div class="col-lg-6">
+		<div class="con">
+			<input type="file" name="photos" aria-required="true" required id="file-input" accept="image/png, image/jpeg" onchange="preview()" multiple>
+			<label class="lb"  for="file-input">
+				<i class="fas fa-upload"></i> &nbsp; اختر صور المنتج
+			</label>
+				<p id="num-of-files" style="
+    margin-right: 14rem;
+">اختر صورة للمنتج</p>
+			<div id="images"></div>
+		</div>	
+	</div>
+
+		<div class="form-group" style="
+    text-align: center;
+    margin-top: 25px;
+margin-bottom: 25px;
+">
+			<input type="submit" value="اضافة" class="button-69" role="button" />
+		</div>
+
+</div>
+</form>
+
+		<script src="~/js/photos.js"></script>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

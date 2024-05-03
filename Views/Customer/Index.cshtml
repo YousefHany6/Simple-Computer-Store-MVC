@@ -1,0 +1,145 @@
+﻿@model IEnumerable<Product>
+
+<link href="~/template/css/ppp.css" rel="stylesheet" />
+<section class="home">
+	<div class="content">
+		<h1>
+			<span>Electronic Products</span>
+			<br>
+		</h1>
+		<p>
+			
+			افضل جودة وافضل سعر 
+		</p>
+		<div class="btn">
+			<a href="#shop" style="
+		width: 150px;
+		height: 32px;
+		letter-spacing: 3px;
+		background-color: rgb(67 0 86);
+		color: white;
+		border-radius: 5px;
+		border: none;
+		transition: 0.5s ease;
+		cursor: pointer;
+		display: block;
+		text-decoration: none;
+		padding-top: 4px;
+		">تسوق الان</a>
+		</div>
+
+	</div>
+	<div class="img">
+		<img src="~/photos/pngwing.com (1).png" alt="">
+	</div>
+</section>
+<div class="container-fluid bg-trasparent my-4 p-3" id="shop" style="position: relative;background-color: #eee;">
+ <h1 class="text-center" style="    color: #ffc800;
+    text-shadow: 1px 1px 1px black;
+    border-bottom: 2px solid #ffc800; margin-bottom:20px; ">
+  المنتجات المتوفرة
+ </h1>
+
+ <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+  @{
+   foreach (var item in Model)
+   {
+    <div class="col hp">
+     <div class="card h-100 shadow-sm">
+      @{
+       var randomPhoto = item.Photos.OrderBy(p => Guid.NewGuid()).FirstOrDefault();
+      }
+      <a target="_blank" asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId">
+       <img src="data:image/png;base64,@Convert.ToBase64String(randomPhoto.Url)" class="card-img-top" alt="product.title" />
+      </a>
+      @if (item.HasDiscount == true)
+      {
+       foreach (var d in item.Discounts)
+       {
+        <div class="">
+         <div class="d-flex  align-items-end h-100" style="
+                                              direction: ltr;
+                                              height: 0px !important;
+                                                 ">
+          <h5><span class="badge bg-danger ms-2">-@(100 - ((d.DiscountAmount / item.price) * 100))%</span></h5>
+         </div>
+        </div>
+
+        
+       }
+      }
+
+      <div class="label-top shadow-sm">
+       <a class="text-white" style="text-decoration:none;" >@item.Type</a>
+      </div>
+      <div class="card-body">
+       <div class="clearfix mb-3">
+        @if (item.HasDiscount == true)
+        {
+         foreach (var d in item.Discounts)
+         {
+     
+          <span class="float-start badge rounded-pill bg-success">$@d.DiscountAmount</span>
+
+          <span class="float-start badge rounded-pill bg-success" style="color:red !important;"><del>$@item.price</del></span>
+         }
+        }else
+        {
+         <span class="float-start badge rounded-pill bg-success">$@item.price</span>
+
+
+        }
+        <span class="float-end"><a asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId" class="small text-muted text-uppercase aff-link">عرض المزيد</a></span>
+       </div>
+       <h5 class="card-title">
+        <a target="_blank" asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId">
+
+         @if (item.Description==null)
+         {
+          <div>
+           لا يوجد معلومات
+
+          </div>
+         }else
+         {
+          <div>
+           @item.Description
+          </div>
+         }
+        </a>
+       </h5>
+
+       <div class="d-grid gap-2 my-4">
+       		<form asp-controller="Customer" asp-action="Carthome" asp-route-idprd="@item.ProductId" asp-route-catid="@item.CategoryID" method="post" enctype="multipart/form-data" style="
+								display: contents;
+								">
+        <button type="submit" class="btn btn-warning bold-btn">اضافة الى السلة</button>
+        </form>
+       </div>
+       <div class="clearfix mb-1">
+
+        <span class="float-start"><a asp-controller="Customer" asp-action="product_page" asp-route-prdid="@item.ProductId"><i class="fas fa-question-circle"></i></a></span>
+
+        <span class="float-end">
+         <i class="far fa-heart" style="cursor: pointer; visibility:hidden;"></i>
+
+        </span>
+       </div>
+      </div>
+     </div>
+    </div>
+
+   }
+  }
+  
+
+
+ </div>
+</div>
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+
+
+}
